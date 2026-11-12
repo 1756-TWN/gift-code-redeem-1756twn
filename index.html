@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta property="og:title" content="Kingshot Alliance Batch Redeem | Hot×Gie"/>
-  <meta property="og:description" content="Redeem gift codes for 1756 TWN"/>
-  <meta property="og:url" content="https://ks-transfer-ranking.github.io/kingdom-ranker/"/>
-  <meta property="og:image"content="/kingdom-ranker/og-image.jpeg"/>
-	<link rel="apple-touch-icon" sizes="180x180" href="/kingdom-ranker/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/kingdom-ranker/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/kingdom-ranker/favicon-16x16.png">
-	<link rel="manifest" href="/kingdom-ranker/site.webmanifest">
+    <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta property="og:title" content="🎁 Kingshot Alliance Batch Redeem | Hot×Gie"/>
+		<meta property="og:description" content="Redeem gift codes for 1756 TWN"/>
+		<meta property="og:url" content="https://ks-transfer-ranking.github.io/kingdom-ranker/"/>
+		<meta property="og:image"content="/kingdom-ranker/og-image.jpeg"/>
+		<link rel="apple-touch-icon" sizes="180x180" href="/kingdom-ranker/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/kingdom-ranker/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/kingdom-ranker/favicon-16x16.png">
+		<link rel="manifest" href="/kingdom-ranker/site.webmanifest">
     <title>🎁 Kingshot Alliance Batch Redeem | Hot×Gie</title>
     <style>
         :root {
@@ -26,6 +26,8 @@
             --accent-blue: #38bdf8;
             --btn-primary: #0284c7;
             --btn-hover: #0369a1;
+            --btn-retry: #d97706;
+            --btn-retry-hover: #b45309;
             --btn-disabled: #475569;
             --status-pending: #94a3b8;
             --status-pending-bg: rgba(148, 163, 184, 0.15);
@@ -52,7 +54,7 @@
 
         .container {
             width: 100%;
-            max-width: 880px;
+            max-width: 940px;
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -88,8 +90,8 @@
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
 
-        .input-group button {
-            padding: 0.75rem 1.75rem;
+        button {
+            padding: 0.75rem 1.5rem;
             font-size: 0.95rem;
             font-weight: 600;
             color: #ffffff;
@@ -98,10 +100,33 @@
             border-radius: 8px;
             cursor: pointer;
             white-space: nowrap;
+            transition: background-color 0.2s;
         }
 
-        .input-group button:hover:not(:disabled) { background-color: var(--btn-hover); }
-        .input-group button:disabled { background-color: var(--btn-disabled); cursor: not-allowed; opacity: 0.75; }
+        button:hover:not(:disabled) { background-color: var(--btn-hover); }
+        button:disabled { background-color: var(--btn-disabled); cursor: not-allowed; opacity: 0.7; }
+
+        .btn-retry-all {
+            background-color: var(--btn-retry);
+            padding: 0.45rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-retry-all:hover:not(:disabled) { background-color: var(--btn-retry-hover); }
+
+        .btn-retry-one {
+            background-color: transparent;
+            border: 1px solid var(--btn-retry);
+            color: var(--status-running);
+            padding: 0.25rem 0.65rem;
+            font-size: 0.78rem;
+            border-radius: 6px;
+        }
+
+        .btn-retry-one:hover:not(:disabled) {
+            background-color: var(--btn-retry);
+            color: #ffffff;
+        }
 
         .status-box {
             display: none;
@@ -122,7 +147,9 @@
         .summary-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
             padding: 0.75rem 1rem;
             margin-bottom: 1rem;
             background-color: var(--bg-input);
@@ -131,10 +158,11 @@
             font-weight: 600;
         }
 
-        .summary-bar .stat-total { color: var(--text-primary); }
-        .summary-bar .stat-progress { color: var(--accent-blue); }
-        .summary-bar .stat-ok { color: var(--status-success); }
-        .summary-bar .stat-fail { color: var(--status-error); }
+        .summary-stats { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+        .summary-stats .stat-total { color: var(--text-primary); }
+        .summary-stats .stat-progress { color: var(--accent-blue); }
+        .summary-stats .stat-ok { color: var(--status-success); }
+        .summary-stats .stat-fail { color: var(--status-error); }
 
         .table-wrapper {
             width: 100%;
@@ -159,14 +187,15 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        tbody td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         tbody tr:last-child td { border-bottom: none; }
         tbody tr.row-active { background-color: var(--bg-row-active); }
 
         .col-index { width: 50px; color: var(--text-muted); }
-        .col-nickname { font-weight: 500; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .col-fid { font-family: monospace; color: var(--text-secondary); width: 125px; }
-        .col-status { width: 130px; }
+        .col-nickname { font-weight: 500; max-width: 210px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .col-fid { font-family: monospace; color: var(--text-secondary); width: 120px; }
+        .col-status { width: 125px; }
+        .col-action { width: 95px; text-align: right; }
 
         .badge {
             display: inline-block;
@@ -191,7 +220,7 @@
 <body>
     <main class="container">
         <header class="header">
-            <h1>🎁 Kingshot Alliance Batch Redeem</h1>
+            <h1>Kingshot Alliance Batch Redeem</h1>
             <p class="subtitle">Real-time member sync (KID 1756 &bull; TWN) &amp; live redemption progress.</p>
         </header>
 
@@ -203,8 +232,12 @@
         <div id="statusBox" class="status-box info"></div>
 
         <section id="resultSection" class="result-section">
-            <div id="summaryBar" class="summary-bar"></div>
-            <div class="table-wrapper" id="tableWrapper">
+            <div class="summary-bar">
+                <div id="summaryStats" class="summary-stats"></div>
+                <button id="retryAllBtn" class="btn-retry-all" style="display: none;" onclick="retryAllFailed()">Retry All Failed</button>
+            </div>
+
+            <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
@@ -213,6 +246,7 @@
                             <th>FID</th>
                             <th>Status</th>
                             <th>Message</th>
+                            <th class="col-action">Action</th>
                         </tr>
                     </thead>
                     <tbody id="resultsTableBody"></tbody>
@@ -221,17 +255,170 @@
         </section>
     </main>
     <script>
-        const DELAY_MS = 3200; // 3.2s delay between each player to respect official rate limits
+        const DELAY_MS = 3200;
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 				const apiBaseUrl = "https://gift-code-redeem-1756twn.vercel.app";
 
+        let currentCode = "";
+        let currentKid = "1756";
+        let memberList = [];
+        let isBatchRunning = false;
+
+        function updateSummaryUI() {
+            const total = memberList.length;
+            const processed = memberList.filter(m => m.status === "success" || m.status === "error").length;
+            const successCount = memberList.filter(m => m.status === "success").length;
+            const failCount = memberList.filter(m => m.status === "error").length;
+
+            document.getElementById("summaryStats").innerHTML = [
+                '<span class="stat-total">Total: ' + total + '</span>',
+                '<span class="stat-progress">Progress: ' + processed + ' / ' + total + '</span>',
+                '<span class="stat-ok">Success: ' + successCount + '</span>',
+                '<span class="stat-fail">Failed: ' + failCount + '</span>'
+            ].join("");
+
+            const retryAllBtn = document.getElementById("retryAllBtn");
+            if (failCount > 0 && !isBatchRunning) {
+                retryAllBtn.style.display = "inline-block";
+                retryAllBtn.innerText = "Retry All Failed (" + failCount + ")";
+                retryAllBtn.disabled = false;
+            } else if (isBatchRunning) {
+                retryAllBtn.disabled = true;
+            } else {
+                retryAllBtn.style.display = "none";
+            }
+        }
+
+        function setControlsDisabled(disabled) {
+            isBatchRunning = disabled;
+            document.getElementById("redeemBtn").disabled = disabled;
+            document.getElementById("giftCodeInput").disabled = disabled;
+
+            document.querySelectorAll(".btn-retry-one").forEach(btn => {
+                btn.disabled = disabled;
+            });
+            updateSummaryUI();
+        }
+
+        async function processSinglePlayer(idx, scrollIntoView = false) {
+            const member = memberList[idx];
+            if (!member) return;
+
+            const row = document.getElementById("member-row-" + idx);
+            const badge = document.getElementById("badge-" + idx);
+            const msg = document.getElementById("msg-" + idx);
+            const actionCell = document.getElementById("action-" + idx);
+
+            member.status = "running";
+            if (row) {
+                row.classList.add("row-active");
+                if (scrollIntoView) row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+            if (badge) {
+                badge.className = "badge running";
+                badge.textContent = "Redeeming...";
+            }
+            if (msg) {
+                msg.style.color = "var(--status-running)";
+                msg.textContent = "Sending request...";
+            }
+            if (actionCell) {
+                actionCell.innerHTML = "";
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/codeRedeem`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "redeemOne",
+                        giftCode: currentCode,
+                        fid: member.fid,
+                        kid: currentKid
+                    })
+                });
+
+                const data = await response.json();
+                const isSuccess = data.status === "success";
+
+                member.status = isSuccess ? "success" : "error";
+                member.message = data.message || "Unknown response";
+            } catch (err) {
+                member.status = "error";
+                member.message = "Network error: " + err.message;
+            }
+
+            if (row) row.classList.remove("row-active");
+            if (badge) {
+                badge.className = "badge " + (member.status === "success" ? "success" : "error");
+                badge.textContent = member.status === "success" ? "Success" : "Failed";
+            }
+            if (msg) {
+                msg.style.color = "var(--text-primary)";
+                msg.textContent = member.message;
+            }
+            if (actionCell && member.status === "error") {
+                const retryBtn = document.createElement("button");
+                retryBtn.className = "btn-retry-one";
+                retryBtn.textContent = "Retry";
+                retryBtn.disabled = isBatchRunning;
+                retryBtn.onclick = () => retrySinglePlayer(idx);
+                actionCell.appendChild(retryBtn);
+            }
+
+            updateSummaryUI();
+        }
+
+        async function retrySinglePlayer(idx) {
+            if (isBatchRunning) return;
+            const statusBox = document.getElementById("statusBox");
+            const member = memberList[idx];
+
+            setControlsDisabled(true);
+            statusBox.className = "status-box info";
+            statusBox.innerText = "Retrying single member: " + member.nick_name + " (" + member.fid + ")...";
+
+            await processSinglePlayer(idx, false);
+
+            statusBox.className = member.status === "success" ? "status-box success" : "status-box error";
+            statusBox.innerText = "Single retry finished for " + member.nick_name + ": " + member.message;
+            setControlsDisabled(false);
+        }
+
+        async function retryAllFailed() {
+            if (isBatchRunning) return;
+            const failedIndices = memberList
+                .map((m, idx) => (m.status === "error" ? idx : -1))
+                .filter(idx => idx !== -1);
+
+            if (failedIndices.length === 0) return;
+
+            const statusBox = document.getElementById("statusBox");
+            setControlsDisabled(true);
+            statusBox.className = "status-box info";
+
+            for (let i = 0; i < failedIndices.length; i++) {
+                const targetIdx = failedIndices[i];
+                const member = memberList[targetIdx];
+                statusBox.innerText = "Retrying failed (" + (i + 1) + "/" + failedIndices.length + "): " + member.nick_name + " (" + member.fid + ")...";
+
+                await processSinglePlayer(targetIdx, true);
+
+                if (i < failedIndices.length - 1) {
+                    await sleep(DELAY_MS);
+                }
+            }
+
+            statusBox.className = "status-box success";
+            statusBox.innerText = "Completed retrying all failed members for code: " + currentCode;
+            setControlsDisabled(false);
+        }
         async function startRedeem() {
             const input = document.getElementById("giftCodeInput");
             const btn = document.getElementById("redeemBtn");
             const statusBox = document.getElementById("statusBox");
             const resultSection = document.getElementById("resultSection");
             const tbody = document.getElementById("resultsTableBody");
-            const summaryBar = document.getElementById("summaryBar");
 
             const giftCode = input.value.trim();
             if (!giftCode) {
@@ -240,28 +427,16 @@
                 return;
             }
 
-            btn.disabled = true;
-            btn.innerText = "Running...";
-            resultSection.style.display = "none";
+            currentCode = giftCode;
+            memberList = [];
             tbody.innerHTML = "";
+            resultSection.style.display = "none";
 
+            setControlsDisabled(true);
+            btn.innerText = "Running...";
             statusBox.className = "status-box info";
             statusBox.style.display = "block";
             statusBox.innerText = "Fetching latest alliance member list...";
-
-            let totalMembers = 0;
-            let processedCount = 0;
-            let successCount = 0;
-            let failCount = 0;
-
-            const updateSummary = () => {
-                summaryBar.innerHTML = [
-                    '<span class="stat-total">Total: ' + totalMembers + '</span>',
-                    '<span class="stat-progress">Progress: ' + processedCount + ' / ' + totalMembers + '</span>',
-                    '<span class="stat-ok">Success: ' + successCount + '</span>',
-                    '<span class="stat-fail">Failed / Claimed: ' + failCount + '</span>'
-                ].join("");
-            };
 
             try {
                 const listRes = await fetch(`${apiBaseUrl}/api/codeRedeem`, {
@@ -275,12 +450,15 @@
                     throw new Error(listData.error || "Failed to load member list");
                 }
 
-                const members = listData.members;
-                const targetKid = listData.kid;
-                totalMembers = members.length;
+                currentKid = listData.kid;
+                memberList = listData.members.map(m => ({
+                    fid: m.fid,
+                    nick_name: m.nick_name,
+                    status: "pending",
+                    message: "Waiting in queue..."
+                }));
 
-                // Render all rows immediately as "Pending"
-                members.forEach((m, idx) => {
+                memberList.forEach((m, idx) => {
                     const tr = document.createElement("tr");
                     tr.id = "member-row-" + idx;
 
@@ -304,98 +482,40 @@
                     const tdMsg = document.createElement("td");
                     tdMsg.id = "msg-" + idx;
                     tdMsg.style.color = "var(--text-muted)";
-                    tdMsg.textContent = "Waiting in queue...";
+                    tdMsg.textContent = m.message;
 
-                    tr.append(tdIdx, tdNick, tdFid, tdStatus, tdMsg);
+                    const tdAction = document.createElement("td");
+                    tdAction.id = "action-" + idx;
+                    tdAction.className = "col-action";
+
+                    tr.append(tdIdx, tdNick, tdFid, tdStatus, tdMsg, tdAction);
                     tbody.appendChild(tr);
                 });
 
-                updateSummary();
+                updateSummaryUI();
                 resultSection.style.display = "block";
 
-                for (let i = 0; i < members.length; i++) {
-                    const { fid, nick_name } = members[i];
-                    const row = document.getElementById("member-row-" + i);
-                    const badge = document.getElementById("badge-" + i);
-                    const msg = document.getElementById("msg-" + i);
+                for (let i = 0; i < memberList.length; i++) {
+                    const member = memberList[i];
+                    statusBox.innerText = "Redeeming (" + (i + 1) + "/" + memberList.length + "): " + member.nick_name + " (" + member.fid + ")...";
 
-                    // Highlight current row
-                    if (row) {
-                        row.classList.add("row-active");
-                        row.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                    }
-                    if (badge) {
-                        badge.className = "badge running";
-                        badge.textContent = "Redeeming...";
-                    }
-                    if (msg) {
-                        msg.style.color = "var(--status-running)";
-                        msg.textContent = "Sending request...";
-                    }
-                    statusBox.innerText = "Redeeming (" + (i + 1) + "/" + totalMembers + "): " + nick_name + " (" + fid + ")...";
+                    await processSinglePlayer(i, true);
 
-                    try {
-                        const redeemRes = await fetch(`${apiBaseUrl}/api/codeRedeem`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                action: "redeemOne",
-                                giftCode,
-                                fid,
-                                kid: targetKid
-                            })
-                        });
-
-                        const resultData = await redeemRes.json();
-                        const isSuccess = resultData.status === "success";
-
-                        processedCount++;
-                        if (isSuccess) successCount++;
-                        else failCount++;
-                        updateSummary();
-
-                        if (row) row.classList.remove("row-active");
-                        if (badge) {
-                            badge.className = "badge " + (isSuccess ? "success" : "error");
-                            badge.textContent = isSuccess ? "Success" : "Failed";
-                        }
-                        if (msg) {
-                            msg.style.color = "var(--text-primary)";
-                            msg.textContent = resultData.message || "Unknown response";
-                        }
-                    } catch (reqErr) {
-                        processedCount++;
-                        failCount++;
-                        updateSummary();
-
-                        if (row) row.classList.remove("row-active");
-                        if (badge) {
-                            badge.className = "badge error";
-                            badge.textContent = "Failed";
-                        }
-                        if (msg) {
-                            msg.style.color = "var(--text-primary)";
-                            msg.textContent = "Network error: " + reqErr.message;
-                        }
-                    }
-
-                    // Wait 3.2s before next player
-                    if (i < members.length - 1) {
+                    if (i < memberList.length - 1) {
                         await sleep(DELAY_MS);
                     }
                 }
 
                 statusBox.className = "status-box success";
-                statusBox.innerText = "All done! Batch redemption completed for code: " + giftCode;
+                statusBox.innerText = "All done! Batch redemption completed for code: " + currentCode;
             } catch (err) {
                 statusBox.className = "status-box error";
                 statusBox.innerText = "Error: " + err.message;
             } finally {
-                btn.disabled = false;
                 btn.innerText = "Redeem for All";
+                setControlsDisabled(false);
             }
         }
     </script>
 </body>
 </html>
-
