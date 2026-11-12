@@ -264,7 +264,7 @@
 
             try {
                 // Step 1: Fetch member list first
-                const listRes = await fetch("/api/codeRedeem", {
+                const listRes = await fetch("https://gift-code-redeem-1756twn.vercel.app/api/codeRedeem", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action: "getMembers" })
