@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta property="og:title" content="Kingshot Alliance Batch Redeem | Hot×Gie"/>
+  <meta property="og:description" content="Redeem gift codes for 1756 TWN"/>
+  <meta property="og:url" content="https://ks-transfer-ranking.github.io/kingdom-ranker/"/>
+  <meta property="og:image"content="/kingdom-ranker/og-image.jpeg"/>
+	<link rel="apple-touch-icon" sizes="180x180" href="/kingdom-ranker/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/kingdom-ranker/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/kingdom-ranker/favicon-16x16.png">
+	<link rel="manifest" href="/kingdom-ranker/site.webmanifest">
+    <title>🎁 Kingshot Alliance Batch Redeem | Hot×Gie</title>
+    <style>
+        :root {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+            --bg-table-head: #0b1120;
+            --bg-row-active: rgba(250, 204, 21, 0.08);
+            --border-color: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #38bdf8;
+            --btn-primary: #0284c7;
+            --btn-hover: #0369a1;
+            --btn-disabled: #475569;
+            --status-pending: #94a3b8;
+            --status-pending-bg: rgba(148, 163, 184, 0.15);
+            --status-running: #facc15;
+            --status-running-bg: rgba(250, 204, 21, 0.18);
+            --status-success: #4ade80;
+            --status-success-bg: rgba(74, 222, 128, 0.15);
+            --status-error: #f87171;
+            --status-error-bg: rgba(248, 113, 113, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 2.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 880px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+            height: fit-content;
+        }
+
+        .header {
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .header h1 { font-size: 1.5rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 0.35rem; }
+        .header .subtitle { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .input-group { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+
+        .input-group input[type="text"] {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .input-group input[type="text"]:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        .input-group button {
+            padding: 0.75rem 1.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: var(--btn-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .input-group button:hover:not(:disabled) { background-color: var(--btn-hover); }
+        .input-group button:disabled { background-color: var(--btn-disabled); cursor: not-allowed; opacity: 0.75; }
+
+        .status-box {
+            display: none;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            background-color: var(--bg-input);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .status-box.info { border-left-color: var(--accent-blue); }
+        .status-box.success { border-left-color: var(--status-success); }
+        .status-box.error { border-left-color: var(--status-error); }
+
+        .result-section { display: none; }
+
+        .summary-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            background-color: var(--bg-input);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .summary-bar .stat-total { color: var(--text-primary); }
+        .summary-bar .stat-progress { color: var(--accent-blue); }
+        .summary-bar .stat-ok { color: var(--status-success); }
+        .summary-bar .stat-fail { color: var(--status-error); }
+
+        .table-wrapper {
+            width: 100%;
+            max-height: 520px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            scroll-behavior: smooth;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: var(--bg-table-head);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tbody td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr.row-active { background-color: var(--bg-row-active); }
+
+        .col-index { width: 50px; color: var(--text-muted); }
+        .col-nickname { font-weight: 500; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .col-fid { font-family: monospace; color: var(--text-secondary); width: 125px; }
+        .col-status { width: 130px; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.22rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge.pending { background-color: var(--status-pending-bg); color: var(--status-pending); }
+        .badge.running { background-color: var(--status-running-bg); color: var(--status-running); animation: pulse 1.2s infinite; }
+        .badge.success { background-color: var(--status-success-bg); color: var(--status-success); }
+        .badge.error { background-color: var(--status-error-bg); color: var(--status-error); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <h1>🎁 Kingshot Alliance Batch Redeem</h1>
+            <p class="subtitle">Real-time member sync (KID 1756 &bull; TWN) &amp; live redemption progress.</p>
+        </header>
+
+        <section class="input-group">
+            <input type="text" id="giftCodeInput" placeholder="Enter Gift Code (e.g. KS1111)" autocomplete="off" onkeydown="if (event.key === 'Enter') startRedeem()" />
+            <button id="redeemBtn" onclick="startRedeem()">Redeem for All</button>
+        </section>
+
+        <div id="statusBox" class="status-box info"></div>
+
+        <section id="resultSection" class="result-section">
+            <div id="summaryBar" class="summary-bar"></div>
+            <div class="table-wrapper" id="tableWrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-index">#</th>
+                            <th>Nickname</th>
+                            <th>FID</th>
+                            <th>Status</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script>
+        async function startRedeem() {
+            const input = document.getElementById("giftCodeInput");
+            const btn = document.getElementById("redeemBtn");
+            const statusBox = document.getElementById("statusBox");
+            const resultSection = document.getElementById("resultSection");
+            const tbody = document.getElementById("resultsTableBody");
+            const summaryBar = document.getElementById("summaryBar");
+
+            const giftCode = input.value.trim();
+            if (!giftCode) {
+                alert("Please enter a valid gift code.");
+                input.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Running...";
+            resultSection.style.display = "none";
+            tbody.innerHTML = "";
+
+            statusBox.className = "status-box info";
+            statusBox.style.display = "block";
+            statusBox.innerText = "Fetching latest alliance member list...";
+
+            let totalMembers = 0;
+            let processedCount = 0;
+            let successCount = 0;
+            let failCount = 0;
+
+            const updateSummary = () => {
+                summaryBar.innerHTML = [
+                    '<span class="stat-total">Total: ' + totalMembers + '</span>',
+                    '<span class="stat-progress">Progress: ' + processedCount + ' / ' + totalMembers + '</span>',
+                    '<span class="stat-ok">Success: ' + successCount + '</span>',
+                    '<span class="stat-fail">Failed / Claimed: ' + failCount + '</span>'
+                ].join("");
+            };
+
+            try {
+                const response = await fetch("https://gift-code-redeem-1756twn.vercel.app/api/codeRedeem", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ giftCode })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Server returned HTTP " + response.status);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let buffer = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        if (!line.trim()) continue;
+                        const event = JSON.parse(line);
+
+                        if (event.type === "error") {
+                            throw new Error(event.error);
+                        }
+
+                        // Step 1: Render full member list immediately upon fetch
+                        if (event.type === "members") {
+                            totalMembers = event.total;
+                            statusBox.innerText = "Loaded " + totalMembers + " members (" + event.allianceName + "). Starting batch redemption...";
+                            updateSummary();
+
+                            event.members.forEach((m, idx) => {
+                                const tr = document.createElement("tr");
+                                tr.id = "member-row-" + idx;
+
+                                const tdIdx = document.createElement("td");
+                                tdIdx.className = "col-index";
+                                tdIdx.textContent = idx + 1;
+
+                                const tdNick = document.createElement("td");
+                                tdNick.className = "col-nickname";
+                                tdNick.title = m.nick_name;
+                                tdNick.textContent = m.nick_name;
+
+                                const tdFid = document.createElement("td");
+                                tdFid.className = "col-fid";
+                                tdFid.textContent = m.fid;
+
+                                const tdStatus = document.createElement("td");
+                                tdStatus.className = "col-status";
+                                tdStatus.innerHTML = '<span id="badge-' + idx + '" class="badge pending">Pending</span>';
+
+                                const tdMsg = document.createElement("td");
+                                tdMsg.id = "msg-" + idx;
+                                tdMsg.style.color = "var(--text-muted)";
+                                tdMsg.textContent = "Waiting in queue...";
+
+                                tr.append(tdIdx, tdNick, tdFid, tdStatus, tdMsg);
+                                tbody.appendChild(tr);
+                            });
+
+                            resultSection.style.display = "block";
+                        }
+
+                        // Step 2: Highlight current row and update status to "Redeeming..."
+                        if (event.type === "progress") {
+                            const row = document.getElementById("member-row-" + event.index);
+                            const badge = document.getElementById("badge-" + event.index);
+                            const msg = document.getElementById("msg-" + event.index);
+
+                            if (row) {
+                                row.classList.add("row-active");
+                                row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                            }
+                            if (badge) {
+                                badge.className = "badge running";
+                                badge.textContent = "Redeeming...";
+                            }
+                            if (msg) {
+                                msg.style.color = "var(--status-running)";
+                                msg.textContent = "Sending request to server...";
+                            }
+                            statusBox.innerText = "Redeeming (" + (event.index + 1) + "/" + totalMembers + "): " + event.nick_name + " (" + event.fid + ")...";
+                        }
+
+                        // Step 3: Update row with final status and message
+                        if (event.type === "result") {
+                            processedCount++;
+                            const isSuccess = event.status === "success";
+                            if (isSuccess) successCount++;
+                            else failCount++;
+                            updateSummary();
+
+                            const row = document.getElementById("member-row-" + event.index);
+                            const badge = document.getElementById("badge-" + event.index);
+                            const msg = document.getElementById("msg-" + event.index);
+
+                            if (row) row.classList.remove("row-active");
+                            if (badge) {
+                                badge.className = "badge " + (isSuccess ? "success" : "error");
+                                badge.textContent = isSuccess ? "Success" : "Failed";
+                            }
+                            if (msg) {
+                                msg.style.color = "var(--text-primary)";
+                                msg.textContent = event.message;
+                            }
+                        }
+
+                        // Step 4: All done
+                        if (event.type === "done") {
+                            statusBox.className = "status-box success";
+                            statusBox.innerText = "All done! Batch redemption completed for code: " + event.giftCode;
+                        }
+                    }
+                }
+            } catch (err) {
+                statusBox.className = "status-box error";
+                statusBox.innerText = "Error: " + err.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Redeem for All";
+            }
+        }
+    </script>
+</body>
+</html>
